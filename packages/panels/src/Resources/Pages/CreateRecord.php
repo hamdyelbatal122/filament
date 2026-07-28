@@ -86,13 +86,7 @@ class CreateRecord extends Page
     public function create(bool $another = false): void
     {
         if ($this->isCreating) {
-            $lastCreatedAt = session()->get('last_created_at_' . $this->getId());
-
-            if ($lastCreatedAt && (time() - $lastCreatedAt > 15)) {
-                $this->isCreating = false;
-            } else {
-                return;
-            }
+            return;
         }
 
         $this->isCreating = true;
@@ -169,7 +163,7 @@ class CreateRecord extends Page
 
         $redirectUrl = $this->getRedirectUrl();
 
-        session()->put('last_created_at_' . $this->getId(), time());
+        $this->isCreating = false;
 
         $this->redirect($redirectUrl, navigate: FilamentView::hasSpaMode($redirectUrl));
     }

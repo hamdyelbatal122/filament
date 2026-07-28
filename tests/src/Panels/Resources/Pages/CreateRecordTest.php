@@ -35,7 +35,7 @@ it('can create', function (): void {
 
     $newData = Post::factory()->make();
 
-    livewire(CreatePost::class)
+    $component = livewire(CreatePost::class)
         ->fillForm([
             'author_id' => $newData->author->getKey(),
             'content' => $newData->content,
@@ -46,6 +46,8 @@ it('can create', function (): void {
         ->call('create')
         ->assertHasNoFormErrors()
         ->assertRedirect();
+
+    expect($component->get('isCreating'))->toBeFalse();
 
     $record = Post::query()
 
