@@ -35,7 +35,7 @@ it('can create', function (): void {
 
     $newData = Post::factory()->make();
 
-    $component = livewire(CreatePost::class)
+    livewire(CreatePost::class)
         ->fillForm([
             'author_id' => $newData->author->getKey(),
             'content' => $newData->content,
@@ -46,8 +46,6 @@ it('can create', function (): void {
         ->call('create')
         ->assertHasNoFormErrors()
         ->assertRedirect();
-
-    expect($component->get('isCreating'))->toBeFalse();
 
     $record = Post::query()
 
@@ -67,6 +65,27 @@ it('can create', function (): void {
 
     Event::assertDispatched(RecordCreated::class);
     Event::assertDispatched(RecordSaved::class);
+});
+
+it('resets `isCreating` property on component hydration', function (): void {
+    $newData = Post::factory()->make();
+
+    $component = livewire(CreatePost::class)
+        ->fillForm([
+            'author_id' => $newData->author->getKey(),
+            'content' => $newData->content,
+            'tags' => $newData->tags,
+            'title' => $newData->title,
+            'rating' => $newData->rating,
+        ])
+        ->call('create')
+        ->assertHasNoFormErrors()
+        ->assertRedirect();
+
+    $component->instance()->isCreating = true;
+    $component->refresh();
+
+    expect($component->get('isCreating'))->toBeFalse();
 });
 
 it('can create another', function (): void {
