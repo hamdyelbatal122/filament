@@ -72,7 +72,10 @@ class CreateRecord extends Page
     public function hydrate(): void
     {
         $this->authorizeAccess();
+    }
 
+    public function dehydrate(): void
+    {
         $this->isCreating = false;
     }
 

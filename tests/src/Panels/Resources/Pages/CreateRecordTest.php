@@ -67,7 +67,7 @@ it('can create', function (): void {
     Event::assertDispatched(RecordSaved::class);
 });
 
-it('resets `isCreating` property on component hydration', function (): void {
+it('resets `isCreating` property on component dehydration', function (): void {
     $newData = Post::factory()->make();
 
     $component = livewire(CreatePost::class)
@@ -81,9 +81,6 @@ it('resets `isCreating` property on component hydration', function (): void {
         ->call('create')
         ->assertHasNoFormErrors()
         ->assertRedirect();
-
-    $component->instance()->isCreating = true;
-    $component->refresh();
 
     expect($component->get('isCreating'))->toBeFalse();
 });
